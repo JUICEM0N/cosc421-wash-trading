@@ -1,0 +1,2 @@
+scope,method,communities,modularity,nmi,purity,wash_purity,wash_majority_share,wash_communities,wash_isolation,organic_isolation
+account graph,louvain,1137,0.468277907953075,0.00152440872483453,0.999814243211363,0.416117324683008,0.377777777777778,25,0.882533389505267,0.613266779545504

@@ -1,0 +1,5 @@
+stage,trades,traders,tokens
+raw,3576607,323679,6551
+eth_token,3575235,323607,6550
+cleaned,3546239,323456,6531
+self_trades,58569,5452,2735
