@@ -25,9 +25,7 @@ account_reciprocity <- function(g) {
   tabulate(edges[mutual, 1], nbins = vcount(g)) / pmax(partners(g), 1)
 }
 
-account_betweenness <- function(g, cutoff = -1) {
-  betweenness(g, directed = TRUE, weights = NA, normalized = TRUE, cutoff = cutoff)
-}
+account_betweenness <- function(g) betweenness(g, directed = TRUE, weights = NA, normalized = TRUE)
 
 account_pagerank <- function(g) page_rank(g, directed = TRUE)$vector
 
@@ -67,7 +65,7 @@ graph_summary <- function(g) {
   )
 }
 
-account_summary <- function(g, betweenness_cutoff = NULL) {
+account_summary <- function(g, with_betweenness = FALSE) {
   accounts <- degree_table(g)
   accounts[, `:=`(
     trades_per_partner = trades / pmax(partners, 1),
@@ -76,6 +74,6 @@ account_summary <- function(g, betweenness_cutoff = NULL) {
     coreness = account_coreness(g),
     in_largest_scc = in_largest_scc(g)
   )]
-  if (!is.null(betweenness_cutoff)) accounts[, betweenness := account_betweenness(g, betweenness_cutoff)]
+  if (with_betweenness) accounts[, betweenness := account_betweenness(g)]
   accounts[]
 }

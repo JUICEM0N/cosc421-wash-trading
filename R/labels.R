@@ -87,6 +87,8 @@ label_exchange <- function(exchange, threshold = SCC_THRESHOLD, windows = WASH_W
   list(trades = trades, candidates = candidates[, .(scc_id, size, occurrence, accounts)])
 }
 
+load_labels <- function(exchange, columns = NULL) read_fst(labels_path(exchange), columns = columns, as.data.table = TRUE)
+
 wash_accounts <- function(labelled, include_self_trades = FALSE) {
   chosen <- if (include_self_trades) labelled[wash | self_trade] else labelled[wash == TRUE]
   unique(c(chosen$seller, chosen$buyer))
