@@ -142,7 +142,7 @@ monthly_metrics_plot <- function(monthly, path, exchange) {
     geom_vline(xintercept = kyc, colour = INK$muted, linewidth = 0.3) +
     geom_line(colour = GROUP_COLOURS[["Other accounts"]], linewidth = 0.7) +
     facet_wrap(~metric, ncol = 2, scales = "free_y") +
-    scale_x_date(date_labels = "%Y") +
+    scale_x_date(date_breaks = "1 year", date_labels = "%Y") +
     labs(title = paste(exchange, "network structure by month"),
          subtitle = "Vertical line marks July 2019, when IDEX introduced identity verification (KYC)",
          x = NULL, y = NULL) +
