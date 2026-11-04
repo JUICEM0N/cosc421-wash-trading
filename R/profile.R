@@ -24,11 +24,13 @@ token_profiles <- function(exchange, min_trades_for_nulls = NULL_MODEL_MIN_TRADE
   wash[profiles, on = "token"]
 }
 
+graph_betweenness <- function(g) {
+  if (ecount(g) == 0) return(NULL)
+  data.table(account = V(g)$name, betweenness = account_betweenness(g))
+}
+
 token_betweenness <- function(graphs) {
-  rows <- parallel_map(largest_first(graphs), function(g) {
-    if (ecount(g) == 0) return(NULL)
-    data.table(account = V(g)$name, betweenness = account_betweenness(g))
-  })
+  rows <- parallel_map(largest_first(graphs), graph_betweenness)
   rbindlist(rows)[, .(betweenness = max(betweenness), tokens = .N), by = account]
 }
 
