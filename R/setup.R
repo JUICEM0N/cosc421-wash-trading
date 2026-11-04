@@ -1,7 +1,7 @@
 suppressWarnings(suppressPackageStartupMessages({
   library(data.table)
+  library(fstcore)
   library(fst)
-  loadNamespace("fstcore")
   library(igraph)
   library(ggplot2)
   library(ggraph)
