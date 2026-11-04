@@ -6,20 +6,16 @@ We build trade networks from the IDEX and EtherDelta trade histories released by
 
 ## Setup
 
-Python 3.10 or newer.
+R 4.5 or newer. Open `cosc421-wash-trading.Rproj` in RStudio, or work from the project root in a terminal, then install the packages once:
 
 ```
-python -m venv .venv
-.venv\Scripts\activate
-pip install -e .
+Rscript install.R
 ```
-
-On macOS or Linux, activate with `source .venv/bin/activate` instead.
 
 ## Data
 
 ```
-python scripts/01_download.py
+Rscript scripts/01_download.R
 ```
 
 This downloads four files from [Zenodo record 4540223](https://zenodo.org/records/4540223) into `data/raw` (about 3.2 GB) and checks each one against its published checksum. Data files are not tracked by git.
@@ -37,28 +33,35 @@ Run the scripts in order from the project root. Each step reads what the step be
 
 | Script | What it does |
 | --- | --- |
-| 01_download.py | Download the raw data |
-| 02_clean.py | Rescale token amounts, keep ETH to token trades, add USD volume |
-| 03_build_graphs.py | Build the token graphs, the account graph and the monthly snapshots |
-| 04_label.py | Label wash trades with SCC counting and volume matching |
-| 05_profile.py | RQ1 and RQ3: reciprocity, trades per partner, centrality, null models |
-| 06_communities.py | RQ2: Louvain, Infomap and agreement with the labels |
-| 07_detection.py | RQ4: detection score and evaluation |
-| 08_temporal.py | RQ5: monthly metrics and the July 2019 KYC comparison |
-| 09_figures.py | Figures for the reports |
+| 01_download.R | Download the raw data |
+| 02_clean.R | Rescale token amounts, keep ETH to token trades, add USD volume |
+| 03_build_graphs.R | Build the token, account and monthly edge lists |
+| 04_label.R | Label wash trades with SCC counting and volume matching |
+| 05_profile.R | RQ1 and RQ3: reciprocity, trades per partner, centrality, null models |
+| 06_communities.R | RQ2: Louvain, Infomap and agreement with the labels |
+| 07_detection.R | RQ4: detection score and evaluation |
+| 08_temporal.R | RQ5: monthly metrics and the July 2019 KYC comparison |
+| 09_figures.R | Figures for the reports |
 
-Steps 02 to 09 take `--exchange IDEX`, `--exchange EtherDelta`, or both by default.
+Steps 02 to 09 take `--exchange IDEX`, `--exchange EtherDelta`, or both by default, for example:
 
-Method parameters (SCC threshold, position margin, time windows, null model settings) are in `washtrading/config.py`.
+```
+Rscript scripts/04_label.R --exchange EtherDelta
+```
+
+Method parameters (SCC threshold, position margin, time windows, null model settings) are in `R/config.R`.
+
+`Rscript tests/test_labels.R` checks the labelling on small hand-built trade sets.
 
 ## Layout
 
 | Folder | Contents |
 | --- | --- |
-| washtrading | Project code, one module per stage |
+| R | Project code, one file per stage |
 | scripts | Pipeline steps |
+| tests | Checks for the labelling method |
 | data/raw | Downloaded files |
-| data/processed | Cleaned trades, graphs and labels for each exchange |
+| data/processed | Cleaned trades, edge lists and labels for each exchange |
 | outputs/figures | Figures for the reports |
 | outputs/tables | Tables for the reports |
 | notebooks | Exploration |
@@ -66,7 +69,7 @@ Method parameters (SCC threshold, position margin, time windows, null model sett
 
 ## Notes
 
-The original authors recommend at least 32 GB of RAM for the full IDEX label pass. Load only the columns a step needs and work on one token graph at a time.
+The original authors recommend at least 32 GB of RAM for the full IDEX label pass. Steps read only the columns they need from `data/processed`, and the labelling works through one token at a time.
 
 ## Reference
 
